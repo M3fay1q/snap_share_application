@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+
 import 'package:snap_share_application/src/config/routes/app_routes.dart';
 
 class HomeController extends GetxController {
@@ -43,14 +44,45 @@ class HomeController extends GetxController {
 
   Future<void> pickImage(ImageSource img) async {
     final XFile? image = await picker.pickImage(source: img);
-    isLoading = true;
-    update();
+
     if (image != null) {
       final Uint8List? compressedImage = await _compressImage(File(image.path));
       if (compressedImage != null) {
-        await _uploadImage(compressedImage, image.name);
+        bool imageExists = await _checkImageExists(image.name);
+        if (imageExists) {
+          bool shouldUploadAgain = await _showImageExistsDialog();
+          if (shouldUploadAgain) {
+            isLoading = true;
+            update();
+            String newFileName = _generateNewFileName(image.name);
+            await _uploadImage(compressedImage, newFileName);
+          }
+        } else {
+          isLoading = true;
+          update();
+          await _uploadImage(compressedImage, image.name);
+        }
       }
     }
+  }
+
+  Future<bool> _checkImageExists(String fileName) async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? 'unknown_user';
+      Reference storageRef = storage.ref().child('uploads/$userId/$fileName');
+      // Try to get the download URL to check if the image exists
+      await storageRef.getDownloadURL();
+      return true; // Image exists
+    } catch (e) {
+      return false; // Image does not exist
+    }
+  }
+
+  String _generateNewFileName(String originalFileName) {
+    String fileNameWithoutExtension = originalFileName.split('.').first;
+    String fileExtension = originalFileName.split('.').last;
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    return '$fileNameWithoutExtension-$timestamp.$fileExtension';
   }
 
   Future<Uint8List?> _compressImage(File imageFile) async {
@@ -128,6 +160,27 @@ class HomeController extends GetxController {
     await auth.signOut();
     imageUrls = [];
     Get.offNamed(AppRoutes.signInScreen);
+  }
+
+  Future<bool> _showImageExistsDialog() async {
+    return await Get.dialog<bool>(
+          AlertDialog(
+            title: const Text('Image Already Exists'),
+            content: const Text(
+                'This image is already in the storage. Do you want to upload it again?'),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: true),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   void showPicker(BuildContext context) {
