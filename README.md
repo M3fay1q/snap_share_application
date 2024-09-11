@@ -37,12 +37,11 @@ SnapShare is a Flutter application that allows users to register, log in, and sh
     - Go to the [Firebase Console](https://console.firebase.google.com/).
     - Create a new project or use an existing one.
     - Add Firebase Authentication, Firestore, and Firebase Storage to your project.
-    - Download the `google-services.json` (for Android) or `GoogleService-Info.plist` (for iOS) and place them in the respective directories:
-      - Android: `android/app/`
-      - iOS: `ios/Runner/`
+    - Download the `google-services.json` place them in the directories:
+      - Android: `android/app/`     
 
 5. **Configure Firebase in Your App:**
-    - Ensure you have the necessary configuration for Firebase in your `android/app/build.gradle` and `ios/Podfile`.
+    - Ensure you have the necessary configuration for Firebase in your `android/app/build.gradle`.
 
 ## Usage
 
