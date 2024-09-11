@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163256252499",
+    "project_id": "snapshareapplication",
+    "storage_bucket": "snapshareapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163256252499:android:91ed7d13a5be36caa4eea6",
+        "android_client_info": {
+          "package_name": "com.snap_share_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO6BEDRLlnT1Rfr-gOvfbtPnvWqXxncqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
