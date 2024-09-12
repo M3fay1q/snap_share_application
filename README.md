@@ -21,11 +21,11 @@ SnapShare is a Flutter application that allows users to register, log in, and sh
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/snapshare-application.git
+    git clone https://github.com/M3fay1q/snap_share_application.git
     ```
 2. **Navigate to the Project Directory:**
     ```bash
-    cd snapshare-application
+    cd snap_share_application
     ```
 3. **Install Dependencies:**
     Make sure you have Flutter installed. Run:
